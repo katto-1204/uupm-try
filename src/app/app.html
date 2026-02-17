@@ -1,0 +1,184 @@
+<div class="app-container">
+  <!-- Navigation (Only when logged in) -->
+  <header class="glass nav-header" *ngIf="auth.loggedInUser() as user">
+    <div class="nav-content">
+      <div class="logo">Flex<span>Bank</span></div>
+      <nav>
+        <button (click)="view.set('dashboard')" [class.active]="view() === 'dashboard'">Dashboard</button>
+        <button (click)="handleLogout()">Logout</button>
+      </nav>
+      <div class="user-info">
+        <span>Welcome, <strong>{{ user.fullName }}</strong></span>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+
+    <!-- LOGIN VIEW -->
+    <section class="auth-section" *ngIf="view() === 'login'">
+      <div class="glass auth-card">
+        <h2>Welcome Back</h2>
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" [(ngModel)]="loginUsername" placeholder="Enter username">
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" [(ngModel)]="loginPassword" placeholder="Enter password">
+        </div>
+        <button class="btn btn-primary" (click)="handleLogin()">Login</button>
+        <p class="toggle-view">New here? <a (click)="view.set('register')">Create an account</a></p>
+      </div>
+    </section>
+
+    <!-- REGISTER VIEW -->
+    <section class="auth-section" *ngIf="view() === 'register'">
+      <div class="glass auth-card">
+        <h2>Join FlexBank</h2>
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" [(ngModel)]="regFullName" placeholder="Your full name">
+        </div>
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" [(ngModel)]="regUsername" placeholder="Choose a username">
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" [(ngModel)]="regPassword" placeholder="Choose a password">
+        </div>
+        <button class="btn btn-primary" (click)="handleRegister()">Register</button>
+        <p class="toggle-view">Already have an account? <a (click)="view.set('login')">Login</a></p>
+      </div>
+    </section>
+
+    <!-- DASHBOARD VIEW -->
+    <section class="dashboard-section" *ngIf="view() === 'dashboard'">
+      <div class="header-actions">
+        <h1>Your Financial Overview</h1>
+        <button class="btn btn-cta" (click)="resetAccountForm(); view.set('account-create')">+ New Account</button>
+      </div>
+
+      <div class="accounts-grid">
+        <div class="glass-card account-card" *ngFor="let acc of userAccounts()">
+          <div class="card-type">{{ acc.accountType | titlecase }}</div>
+          <div class="card-id">{{ acc.id }}</div>
+          <div class="card-balance">{{ acc.balance | currency }}</div>
+          <div class="card-owner">{{ acc.fullName }}</div>
+
+          <div class="card-actions">
+            <button (click)="activeAccountId.set(acc.id); view.set('transactions')">Transact</button>
+            <button (click)="editAccount(acc)">Edit</button>
+            <button class="delete" (click)="deleteAccount(acc.id)">Delete</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="empty-state" *ngIf="userAccounts().length === 0">
+        <p>No accounts found. Start by creating a new account!</p>
+      </div>
+    </section>
+
+    <!-- ACCOUNT FORM (CREATE / EDIT) -->
+    <section class="form-section" *ngIf="view() === 'account-create' || view() === 'account-edit'">
+      <div class="glass form-card">
+        <h2>{{ view() === 'account-create' ? 'Create New Account' : 'Edit Account Details' }}</h2>
+        <div class="grid-form">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" [(ngModel)]="accountFullName">
+          </div>
+          <div class="form-group">
+            <label>Date of Birth</label>
+            <input type="date" [(ngModel)]="accountDOB">
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" [(ngModel)]="accountEmail">
+          </div>
+          <div class="form-group">
+            <label>Phone</label>
+            <input type="text" [(ngModel)]="accountPhone">
+          </div>
+          <div class="form-group full-width">
+            <label>Address</label>
+            <textarea [(ngModel)]="accountAddress"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Account Type</label>
+            <select [(ngModel)]="accountType">
+              <option value="savings">Savings</option>
+              <option value="checking">Checking</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-glass" (click)="view.set('dashboard')">Cancel</button>
+          <button class="btn btn-primary" (click)="saveAccount()">Save Account</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TRANSACTIONS VIEW -->
+    <section class="transactions-section" *ngIf="view() === 'transactions' && selectedAccount() as acc">
+      <div class="header-actions">
+        <button (click)="view.set('dashboard')" class="btn-back">← Back to Dashboard</button>
+        <h2>Account: {{ acc.id }} ({{ acc.accountType | titlecase }})</h2>
+      </div>
+
+      <div class="transaction-cols">
+        <!-- New Transaction Form -->
+        <div class="glass trans-form">
+          <h3>New Transaction</h3>
+          <div class="form-group">
+            <label>Amount</label>
+            <input type="number" [(ngModel)]="transAmount">
+          </div>
+          <div class="form-group">
+            <label>Description</label>
+            <input type="text" [(ngModel)]="transDesc">
+          </div>
+          <div class="trans-actions">
+            <button class="btn btn-glass" (click)="handleTransaction('deposit')">Deposit</button>
+            <button class="btn btn-glass" (click)="handleTransaction('withdraw')">Withdraw</button>
+          </div>
+          <hr>
+          <div class="form-group">
+            <label>Target Account ID (For Transfer)</label>
+            <input type="text" [(ngModel)]="transTargetId">
+          </div>
+          <button class="btn btn-cta" style="width: 100%;" (click)="handleTransaction('transfer')">Transfer
+            Funds</button>
+        </div>
+
+        <!-- History Ledger -->
+        <div class="glass trans-history">
+          <h3>Transaction History</h3>
+          <div class="ledger">
+            <div class="ledger-item" *ngFor="let t of banking.getTransactionsByAccount(acc.id)()">
+              <div class="t-info">
+                <span class="t-date">{{ t.date | date:'short' }}</span>
+                <span class="t-desc">{{ t.description }}</span>
+                <small *ngIf="t.type === 'transfer'">
+                  {{ t.accountId === acc.id ? 'To: ' + t.targetAccountId : 'From: ' + t.accountId }}
+                </small>
+              </div>
+              <div class="t-amount"
+                [class.negative]="t.type === 'withdrawal' || (t.type === 'transfer' && t.accountId === acc.id)">
+                {{ (t.type === 'withdrawal' || (t.type === 'transfer' && t.accountId === acc.id) ? -t.amount : t.amount)
+                | currency }}
+              </div>
+            </div>
+            <div class="empty-state" *ngIf="banking.getTransactionsByAccount(acc.id)().length === 0">
+              No transactions yet.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<router-outlet />
