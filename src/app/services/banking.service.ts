@@ -1,4 +1,5 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal, computed, inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 export type AccountType = 'savings' | 'checking';
 
@@ -29,6 +30,9 @@ export interface Account {
     providedIn: 'root'
 })
 export class BankingService {
+    private platformId = inject(PLATFORM_ID);
+    private isBrowser = isPlatformBrowser(this.platformId);
+
     private accounts = signal<Account[]>(this.loadAccounts());
     private transactions = signal<Transaction[]>(this.loadTransactions());
 
@@ -37,16 +41,19 @@ export class BankingService {
     constructor() { }
 
     private loadAccounts(): Account[] {
+        if (!this.isBrowser) return [];
         const data = localStorage.getItem('fb_accounts');
         return data ? JSON.parse(data) : [];
     }
 
     private loadTransactions(): Transaction[] {
+        if (!this.isBrowser) return [];
         const data = localStorage.getItem('fb_transactions');
         return data ? JSON.parse(data) : [];
     }
 
     private save() {
+        if (!this.isBrowser) return;
         localStorage.setItem('fb_accounts', JSON.stringify(this.accounts()));
         localStorage.setItem('fb_transactions', JSON.stringify(this.transactions()));
     }
@@ -91,7 +98,7 @@ export class BankingService {
         if (amount <= 0) throw new Error('Amount must be positive');
 
         const accounts = this.accounts();
-        const accountIndex = accounts.findIndex(a => a.id === accountId);
+        const accountIndex = accounts.findIndex((a: Account) => a.id === accountId);
         if (accountIndex === -1) throw new Error('Account not found');
 
         const updatedAccounts = [...accounts];
@@ -118,7 +125,7 @@ export class BankingService {
         if (amount <= 0) throw new Error('Amount must be positive');
 
         const accounts = this.accounts();
-        const accountIndex = accounts.findIndex(a => a.id === accountId);
+        const accountIndex = accounts.findIndex((a: Account) => a.id === accountId);
         if (accountIndex === -1) throw new Error('Account not found');
 
         if (accounts[accountIndex].balance < amount) {

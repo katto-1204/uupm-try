@@ -1,4 +1,5 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal, computed, inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 export interface User {
     id: string;
@@ -8,9 +9,12 @@ export interface User {
 }
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class AuthService {
+    private platformId = inject(PLATFORM_ID);
+    private isBrowser = isPlatformBrowser(this.platformId);
+
     private users = signal<User[]>(this.loadUsers());
     private currentUser = signal<User | null>(this.loadSession());
 
@@ -19,20 +23,24 @@ export class AuthService {
     constructor() { }
 
     private loadUsers(): User[] {
+        if (!this.isBrowser) return [];
         const data = localStorage.getItem('fb_users');
         return data ? JSON.parse(data) : [];
     }
 
     private loadSession(): User | null {
+        if (!this.isBrowser) return null;
         const data = localStorage.getItem('fb_session');
         return data ? JSON.parse(data) : null;
     }
 
     private saveUsers(users: User[]) {
+        if (!this.isBrowser) return;
         localStorage.setItem('fb_users', JSON.stringify(users));
     }
 
     private saveSession(user: User | null) {
+        if (!this.isBrowser) return;
         if (user) {
             localStorage.setItem('fb_session', JSON.stringify(user));
         } else {
