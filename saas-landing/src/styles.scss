@@ -1,0 +1,525 @@
+/* Google Fonts - IBM Plex Sans for Financial Reliability */
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap');
+
+:root {
+    /* Banking Palette */
+    --primary: #0ea5e9;
+    --primary-dark: #0284c7;
+    --secondary: #0c4a6e;
+    --navy-dark: #041d2c;
+    --cta: #f97316;
+    --cta-dark: #ea580c;
+
+    /* Glassmorphism Tokens */
+    --glass-bg: rgba(255, 255, 255, 0.1);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --glass-blur: blur(16px);
+
+    /* Backgrounds */
+    --bg-dark: #041d2c;
+    --bg-gradient: linear-gradient(135deg, #0c4a6e 0%, #041d2c 100%);
+    --bg-vibrant: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%);
+
+    /* Typography */
+    --font-main: 'IBM Plex Sans', sans-serif;
+
+    /* Spacing & Borders */
+    --radius-lg: 1.5rem;
+    --radius-md: 0.75rem;
+    --transition: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-main);
+    background: var(--bg-dark);
+    color: white;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0;
+    font-weight: 700;
+}
+
+.container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+/* Glassmorphism Utilities */
+.glass {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+}
+
+.glass-card {
+    /* @extend .glass; */
+    /* This is SCSS syntax, will be removed for plain CSS */
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: 2.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    transition: var(--transition);
+
+    &:hover {
+        border-color: rgba(255, 255, 255, 0.3);
+        transform: translateY(-4px);
+    }
+}
+
+/* Buttons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.875rem 2rem;
+    border-radius: 9999px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: var(--transition);
+    cursor: pointer;
+    border: none;
+    font-family: inherit;
+
+    &.btn-primary {
+        background: var(--primary);
+        color: white;
+
+        &:hover {
+            background: var(--primary-dark);
+        }
+    }
+
+    &.btn-cta {
+        background: var(--cta);
+        color: white;
+
+        &:hover {
+            background: var(--cta-dark);
+        }
+    }
+
+    &.btn-glass {
+        /* @extend .glass; */
+        /* This is SCSS syntax, will be removed for plain CSS */
+        background: var(--glass-bg);
+        backdrop-filter: var(--glass-blur);
+        -webkit-backdrop-filter: var(--glass-blur);
+        border: 1px solid var(--glass-border);
+        color: white;
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+    }
+}
+
+/* Navbar */
+.navbar {
+    position: fixed;
+    top: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 4rem);
+    max-width: 1200px;
+    z-index: 1000;
+    border-radius: 9999px;
+    /* @extend .glass; */
+    /* This is SCSS syntax, will be removed for plain CSS */
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    padding: 0.75rem 1.5rem;
+
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .logo {
+        display: flex;
+        align-items: center;
+        gap: 0.875rem;
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: white;
+
+        span {
+            color: var(--primary);
+        }
+
+        .marker {
+            width: 1.5rem;
+            height: 1.5rem;
+            background: var(--bg-vibrant);
+            border-radius: 0.375rem;
+            position: relative;
+
+            &::after {
+                content: '';
+                position: absolute;
+                top: 25%;
+                left: 25%;
+                width: 50%;
+                height: 50%;
+                background: white;
+                border-radius: 1px;
+            }
+        }
+    }
+
+    nav {
+        display: flex;
+        gap: 2.5rem;
+
+        a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+
+            &:hover {
+                color: white;
+            }
+        }
+    }
+}
+
+/* Hero Section */
+.hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding-top: 8rem;
+    background: radial-gradient(circle at top right, rgba(14, 165, 233, 0.15), transparent),
+        radial-gradient(circle at bottom left, rgba(99, 102, 241, 0.15), transparent);
+
+    .hero-grid {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr;
+        gap: 4rem;
+        align-items: center;
+    }
+
+    h1 {
+        font-size: 4.5rem;
+        line-height: 1.1;
+        margin-bottom: 2rem;
+        background: linear-gradient(to bottom right, #fff 50%, rgba(255, 255, 255, 0.5));
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+        font-size: 1.25rem;
+        color: rgba(255, 255, 255, 0.7);
+        margin-bottom: 3rem;
+        max-width: 540px;
+    }
+
+    .actions {
+        display: flex;
+        gap: 1.5rem;
+    }
+}
+
+/* Feature Grid */
+.features-section {
+    padding: 8rem 0;
+
+    .section-header {
+        text-align: center;
+        margin-bottom: 5rem;
+
+        h2 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1.25rem;
+        }
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2.5rem;
+    }
+
+    .feature-card {
+        .icon {
+            width: 4rem;
+            height: 4rem;
+            background: var(--bg-vibrant);
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        h3 {
+            margin-bottom: 1rem;
+        }
+
+        p {
+            color: rgba(255, 255, 255, 0.6);
+        }
+    }
+}
+
+/* Mockup Components */
+.account-preview {
+    /* @extend .glass-card; */
+    /* This is SCSS syntax, will be removed for plain CSS */
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: 0;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    transition: var(--transition);
+    overflow: hidden;
+
+    &:hover {
+        border-color: rgba(255, 255, 255, 0.3);
+        transform: translateY(-4px);
+    }
+
+    .preview-header {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 2rem;
+        border-bottom: 1px solid var(--glass-border);
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+
+        .balance-label {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 0.5rem;
+        }
+
+        .balance-amount {
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+    }
+
+    .preview-list {
+        padding: 2rem;
+
+        .item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+
+            &:last-child {
+                border: none;
+            }
+
+            .info {
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+
+                .marker {
+                    width: 44px;
+                    height: 44px;
+                    background: rgba(255, 255, 255, 0.05);
+                    border-radius: 0.75rem;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+
+                .name {
+                    font-weight: 600;
+                }
+
+                .date {
+                    font-size: 0.75rem;
+                    color: rgba(255, 255, 255, 0.5);
+                }
+            }
+
+            .amount {
+                font-weight: 700;
+
+                &.negative {
+                    color: #f87171;
+                }
+
+                &.positive {
+                    color: #4ade80;
+                }
+            }
+        }
+    }
+}
+
+.bank-card {
+    width: 100%;
+    aspect-ratio: 1.586;
+    background: var(--bg-vibrant);
+    border-radius: 1.5rem;
+    padding: 2rem;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: conic-gradient(from 0deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+        animation: rotate 10s linear infinite;
+    }
+
+    .chip {
+        width: 50px;
+        height: 35px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 4px;
+    }
+
+    .number {
+        font-size: 1.5rem;
+        letter-spacing: 0.2rem;
+        font-family: monospace;
+    }
+
+    .holder {
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1rem;
+    }
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Footer */
+.footer {
+    padding: 6rem 0 3rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+
+    .grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 1.5fr;
+        gap: 4rem;
+        margin-bottom: 4rem;
+    }
+
+    .column {
+        h4 {
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            margin-bottom: 0.75rem;
+        }
+
+        a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            transition: var(--transition);
+
+            &:hover {
+                color: var(--primary);
+            }
+        }
+    }
+
+    .copyright {
+        text-align: center;
+        color: rgba(255, 255, 255, 0.4);
+        font-size: 0.875rem;
+    }
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .hero .hero-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .hero h1 {
+        font-size: 3.5rem;
+    }
+
+    .hero .subtitle {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .hero .actions {
+        justify-content: center;
+    }
+
+    .features-section .grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 2.75rem;
+    }
+
+    .navbar nav {
+        display: none;
+    }
+
+    .features-section .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .footer .grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
